@@ -1,3 +1,4 @@
+from azure.cognitiveservices.vision.computervision.models import image_url
 import cv2
 import os
 import json
@@ -139,8 +140,9 @@ def video_convert(video_name):
     output_name = video_name.split(".mp4")[0]
     video = mp.VideoFileClip(str("videos/{}.mp4".format(video_name)))
     video.audio.write_audiofile("videos\{}.wav".format(output_name))
+    audio_to_text("test3")
 
-def audio_from_video(audio_name):
+def audio_to_text(audio_name):
     subscription_key_audio, region = cnfg.config_audio()
     all_text = []
     done = False
@@ -179,13 +181,24 @@ def audio_from_video(audio_name):
         text_complete+=" "
     audio_analysis(text_complete)
 
-
 def audio_analysis(text):
     # Analyze words
     for word in BAD_WORDS:
         if word.lower() in text:
             print("{} es una mala palabra.".format(word.lower()))
 
+def computer_vision(image):
+    subscription_key, endpoint = cnfg.config_computer_vision()
+    analyze_url = endpoint + "vision/v3.1/analyze"
+
+    headers = {'Ocp-Apim-Subscription-Key': subscription_key}
+    params = {'visualFeatures': 'Categories,Description'}
+    data = {'url': image}
+    response = requests.post(analyze_url, headers=headers,
+                            params=params, json=data)
+
+    analysis = response.json()
+    print(analysis)
 
 def readTxt(path, className):
     route = path + 'results\\' + className + '.txt'
@@ -329,5 +342,6 @@ def main(routeDirectory):
         "You need at least 4 processors, and you have " + cpuCount)'''
 
 
-video_convert("test3")
-audio_from_video("test3")
+#video_convert("test3")
+url = 'https://www.gob.mx/cms/uploads/article/main_image/99875/WhatsApp_Image_2020-09-12_at_12.25.14.jpeg'
+computer_vision(url)
