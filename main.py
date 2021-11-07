@@ -1,4 +1,4 @@
-from azure.cognitiveservices.vision.computervision.models import image_url
+
 import cv2
 import os
 import json
@@ -120,7 +120,7 @@ def azure_images(path, image):
         'Content-Type': 'application/octet-stream',
         'Ocp-Apim-Subscription-Key': subscription_key_face
     }
-
+    
     params = {
         'returnFaceId': 'false',
         'returnFaceAttributes': 'age,gender,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,exposure,noise'
@@ -342,6 +342,6 @@ def main(routeDirectory):
         "You need at least 4 processors, and you have " + cpuCount)'''
 
 
-#video_convert("test3")
-url = 'https://www.gob.mx/cms/uploads/article/main_image/99875/WhatsApp_Image_2020-09-12_at_12.25.14.jpeg'
-computer_vision(url)
+video_convert("test3")
+#url = 'https://www.google.com/search?q=gente+comiendo+pizza&tbm=isch&ved=2ahUKEwjttan-p4L0AhWKFN8KHUc5A28Q2-cCegQIABAA&oq=gente+comi&gs_lcp=CgNpbWcQARgBMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDoHCCMQ7wMQJzoECAAQQ1C9Ali1DWCPJWgAcAB4AIABmQGIAdIGkgEDMC42mAEAoAEBqgELZ3dzLXdpei1pbWfAAQE&sclient=img&ei=s7WFYa2QH4qp_AbH8oz4Bg#imgrc=1tK8nVkWgCmycM'
+#computer_vision(url)
