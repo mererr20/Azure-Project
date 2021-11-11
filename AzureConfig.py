@@ -6,16 +6,19 @@ face_api_key='https://cognitive-recognize.cognitiveservices.azure.com/face/v1.0/
 subscription_key_audio='ef8b2c96b20741e3a99f59962960ee91'
 region='southcentralus'
 
-# Computer Vision Config
-subscription_key_computer_vision = 'cb53891142e74441b616d26d8a7c60dc'
-endpoint = 'https://computer-vision-so.cognitiveservices.azure.com/'
-
-
 def config_face():
     return subscription_key_face, face_api_key
 
 def config_audio():
     return subscription_key_audio, region
 
-def config_computer_vision():
-    return subscription_key_computer_vision, endpoint
+
+'''
+Speech:
+key1: 2fa1606fba5a4e0dab52263d50faaad5
+endpoint: https://speech-so.cognitiveservices.azure.com/sts/v1.0/issuetoken
+
+Face:
+key1: 86706fb9de4840aeb8ed83678f6bf9c0
+endpoint: https://cognitive-service-so.cognitiveservices.azure.com/
+'''

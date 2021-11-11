@@ -1,27 +1,42 @@
 from pydub import AudioSegment
+import moviepy.editor as me
 import math
 
-class SplitWavAudioMubin():
-    def __init__(self, folder, filename):
-        self.folder = folder
+
+class Audio():
+    def __init__(self, path, filename):
+        self.path = path
         self.filename = filename
-        self.filepath = folder + '\\' + filename
+        self.filepath = 'Data\\' + filename + '\\temp\\' + (filename + '.wav')
+        self.audio = ''
+
+    def setAudio(self):
         self.audio = AudioSegment.from_wav(self.filepath)
-    
-    def getDuration(self):
+
+    def getDurationSeconds(self):
         return self.audio.duration_seconds
-    
-    def singleSplit(self, from_min, to_min, split_filename):
-        t1 = from_min * 60 * 1000
-        t2 = to_min * 60 * 1000
+
+    def getDurationMinutes(self):
+        return math.ceil(self.getDurationSeconds() / 60)
+
+    def singleSplit(self, fromMin, toMin, splitFilename):
+        t1 = fromMin * 60 * 1000
+        t2 = toMin * 60 * 1000
         split_audio = self.audio[t1:t2]
-        split_audio.export('Data\\' + self.filename.replace('.wav','') + '\\audio\\' + split_filename + '.wav', format="wav")
-        
-    def multipleSplit(self, min_per_split):
-        total_mins = math.ceil(self.getDuration() / 60)
-        for i in range(0, total_mins, min_per_split):
-            split_fn = str(i) + '_audio'
-            self.singleSplit(i, i + min_per_split, split_fn)
+        split_audio.export('Data\\' + self.filename +
+                           '\\audio\\' + splitFilename + '.wav', format="wav")
+
+    def multipleSplit(self, minSplit):
+        totalMins = self.getDurationMinutes()
+        for i in range(0, totalMins, minSplit):
+            split = str(i) + '_audio'
+            self.singleSplit(i, i + minSplit, split)
             print(str(i) + ' Done')
-            if i == total_mins - min_per_split:
+            if i == totalMins - minSplit:
                 print('All splited successfully')
+
+    def audioExtraction(self):
+        print("Converting...")
+        video = me.VideoFileClip((self.path + '\\' + self.filename + '.mp4'))
+        video.audio.write_audiofile(
+            ('Data\\' + self.filename + '\\temp\\' + self.filename + '.wav'))

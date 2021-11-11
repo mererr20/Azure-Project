@@ -187,18 +187,6 @@ def audio_analysis(text):
         if word.lower() in text:
             print("{} es una mala palabra.".format(word.lower()))
 
-def computer_vision(image):
-    subscription_key, endpoint = cnfg.config_computer_vision()
-    analyze_url = endpoint + "vision/v3.1/analyze"
-
-    headers = {'Ocp-Apim-Subscription-Key': subscription_key}
-    params = {'visualFeatures': 'Categories,Description'}
-    data = {'url': image}
-    response = requests.post(analyze_url, headers=headers,
-                            params=params, json=data)
-
-    analysis = response.json()
-    print(analysis)
 
 def readTxt(path, className):
     route = path + 'results\\' + className + '.txt'
