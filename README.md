@@ -44,21 +44,25 @@ Para llevar a cabo la detección de los objetos, es necesario contar con un mode
 <details open>
 <summary>Instalación</summary>
 
-Se requiere [**Python>=3.6.0**](https://www.python.org/).
+Se requiere [**Python>=3.6.0**](https://www.python.org/) y los requerimientos especificados en [requirements.txt](https://github.com/mererr20/Azure-Project/blob/main/requirements.txt).
 
 ```bash
 $ git clone https://github.com/mererr20/Yolo-Project.git
-$ cd Yolo-Project
+$ cd Azure-Project
+$ pip install -r requirements.txt
 $ pip install azure-appconfiguration
 $ pip install azure-cognitiveservices-speech
 $ pip install audio
 $ pip install futures
 $ pip install moviepy  
+$ pip install pydub
 ```
 
-Una vez tenemos todo lo necesario, debemos ejecutar el [main.py](https://github.com/mererr20/Yolo-Project/main.py)
+  
    
-En el [main.py](https://github.com/mererr20/Yolo-Project/main.py) se debe enviar por parámetros en el método main cuál será la carpeta a analizar (tomando en cuenta que se debe enviar la ruta de dicha carpeta, por ejemplo 'C:\User\...'), por defectos se indica la carpeta [videos](https://github.com/mererr20/Yolo-Project/videos) que se encuentra en la raíz de dicho proyecto.
+Una vez tenemos todo lo necesario, debemos ejecutar el [main.py](https://github.com/mererr20/Azure-Project/blob/main/main.py)
+   
+En el [main.py](https://github.com/mererr20/Yolo-Project/main.py) se debe enviar por parámetros en el método main cuál será la carpeta a analizar (tomando en cuenta que se debe enviar la ruta de dicha carpeta, por ejemplo 'C:\User\...'), por defectos se indica la carpeta [videos](https://github.com/mererr20/Azure-Project/tree/main/videos) que se encuentra en la raíz de dicho proyecto.
 
 </details>
 
@@ -67,7 +71,11 @@ En el [main.py](https://github.com/mererr20/Yolo-Project/main.py) se debe enviar
 
 A continuación, explicamos cómo se implementó la solución realizada y su ejecución.
 
-Para empezar, la función [*main(routeDirectory)*](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L225) es la función principal, la cual será la encargada de llamar las demás funciones para una correcta ejecución, además, la encargada de recibir por parámetro la ruta de la carpeta a analizar,<a href="#cómo-iniciar"> como se mencionó anteriormente.</a>
+
+
+Para empezar, la función [*main(routeDirectory)*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L154) es la función principal, la cual será la encargada de llamar las demás funciones para una correcta ejecución, además, la encargada de recibir por parámetro la ruta de la carpeta a analizar,<a href="#cómo-iniciar"> como se mencionó anteriormente.</a>
+
+Primero, se llama la función [*extraction*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L76) que es la que permite la extracción tanto de los frames de los videos así como el audio de los mismos. Para guardar todo lo que se extrajo se crean carpetas para almacenarlos 
 
 Primeramente, se hace la llamada de la función [*getMoviesRoute*](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L16), esta nos permite extraer los nombres de las películas que se encuentren en la carpeta indicada. Luego de esto, se crean los [directorios](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L25), donde se creará una carpeta con el nombre de la película, dentro de esta se almacenarán los resultados (*results*) y fotogramas obtenidos (*firstPortion* y *secondPortion*).
 
