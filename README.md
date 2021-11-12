@@ -37,7 +37,7 @@ $ git clone https://github.com/mererr20/Azure-Project.git
 $ cd Azure-Project
 $ pip install -r requirements.txt
 ```
-Importante también el ingresar en [*AzureConfig.py*](https://github.com/mererr20/Azure-Project/blob/main/AzureConfig.py) en la línea [*4*](https://github.com/mererr20/Azure-Project/blob/c14c1edd3f3107c17885bcb55a71c4d5524d64c1/AzureConfig.py#L4) y la [*5*](https://github.com/mererr20/Azure-Project/blob/c14c1edd3f3107c17885bcb55a71c4d5524d64c1/AzureConfig.py#L5) las credenciales de Azure. Estas se pueden conseguir al crear un recuerso en [*Azure*](https://portal.azure.com/#create/hub) y en el apartado de *Manage keys* se podrá visualizar una ventana como la siguiente:
+Importante también el ingresar en [*AzureConfig.py*](https://github.com/mererr20/Azure-Project/blob/main/AzureConfig.py) en la línea [*4*](https://github.com/mererr20/Azure-Project/blob/c14c1edd3f3107c17885bcb55a71c4d5524d64c1/AzureConfig.py#L4) y la [*5*](https://github.com/mererr20/Azure-Project/blob/c14c1edd3f3107c17885bcb55a71c4d5524d64c1/AzureConfig.py#L5) las credenciales de Azure. Estas se pueden conseguir al crear un recuerso en [*Azure*](https://portal.azure.com/#create/hub) de tipo Cognitive Services, y en el apartado de *Manage keys* se podrá visualizar una ventana como la siguiente:
 
 <p>
    <div align="center">
@@ -60,17 +60,19 @@ A continuación, explicamos cómo se implementó la solución realizada y su eje
 
 
 
-Para empezar, la función [*main(routeDirectory)*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L154) es la función principal, la cual será la encargada de llamar las demás funciones para una correcta ejecución, además, la encargada de recibir por parámetro la ruta de la carpeta a analizar,<a href="#cómo-iniciar"> como se mencionó anteriormente.</a>
+Para empezar, la función [*main(routeDirectory)*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L246) es la función principal, la cual será la encargada de llamar las demás funciones para una correcta ejecución, además, la encargada de recibir por parámetro la ruta de la carpeta a analizar,<a href="#cómo-iniciar"> como se mencionó anteriormente.</a>
 
-Primero, se llama la función [*extraction*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L76) que es la que permite la extracción tanto de los frames de los videos cada 1 segundo así como el audio para después partirlo en 2. Para guardar todo lo que se extrajo se crean las carpeta Data y dentro de ella subcarpetas con los nombres de los videos. Dentro de estas subcarpetas se almacenan los frames y los audios extraídos.
+Primero, se llama la función [*extraction*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L72) que es la que permite la extracción tanto de los fotogramas de los videos cada 5 segundos, así como el audio para después dividirlo en 2. Para guardar todo lo que se extrajo se crea la carpeta Data, dentro de ella subcarpetas con los nombres de los videos. Dentro de estas subcarpetas se almacenan los frames y los audios extraídos en una carpeta respectivamente.
 
-Ya con todo esto preparado se llama  la función [*distribution*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L120) encargada de organizar las carpetas. Desde esta función se llama a [*distribution*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L96). Esta segunda función lo que hace es invocar la clase [*analizer.py*](https://github.com/mererr20/Azure-Project/blob/main/analyzer.py) que es donde se hace la conección con la API de Azure Cognitive Services.
+Ya con todo esto preparado se llama  la función [*distribution*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L114) encargada de dividir el total de carpetas en 2. En esta función se llama a [*analyzer*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L91). Esta segunda función lo que hace es invocar diferentes métodos de la clase [*analizer.py*](https://github.com/mererr20/Azure-Project/blob/main/analyzer.py) que es donde se hace la conección con la API de Azure Cognitive Services.
 
-Al final, se llama la función [*results*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L141) en donde los resultados generados se guardan en un archivo llamado (*scenes.txt*) que se incluye un rango de las edades de las personas detectdas, una descripción de los escenarios de los frames, si hay contenido adulto, la cantidad de escenas y los tiempos de duración. Además, se muestran gráficos generados a partir de la misma información
+Al final, se llama la función [*results*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L135) en donde los resultados generados se guardan en un archivo llamado (*scenes.txt*) que se incluye un rango de las edades de las personas detectdas, una descripción de los escenarios de los frames, si hay contenido adulto, la cantidad de escenas y los tiempos de duración. Además, se muestran gráficos donde se pueden visualizar el mayor género detectado, el sentimiento del audio y por último una gráfica con las distintas emociones.
+
+Para el proyecto se generan diferentes procesos en paralelo para una respuesta más rápida. Con el vídeo testeado se consiguió una respuesta de 62% más rápida que la ejecución secuencial.
 
 <br><br>
 # <div align="center">Resultados</div>
-Para los resultados presentados a continuación, se utilizó el video llamado "DailyRoutine" que tiene una duración aproximada de 6 minutos , de el cual se obtuvo lo siguiente:
+Para los resultados presentados a continuación, se utilizó el video llamado "DailyRoutine" que tiene una duración aproximada de 6 minutos , del cual se obtuvo lo siguiente:
 
 <p>
    <div align="center">
@@ -87,7 +89,7 @@ Para los resultados presentados a continuación, se utilizó el video llamado "D
 
 <p>
    <div align="center">
-   <img width="550" src="https://github.com/mererr20/Azure-Project/blob/main/resources/gender.jpg"></a>
+   <img width="550" src="https://github.com/mererr20/Azure-Project/blob/main/resources/gender.png"></a>
    </div>
 </p>
 
@@ -99,3 +101,4 @@ El archivo scenes.txt se ve así:
    </div>
 </p>
 
+En la carpeta [Data](https://github.com/mererr20/Yolo-Project/Data) se pueden visualizar otros resultados obtenidos de otro vídeo testeado.
