@@ -101,4 +101,4 @@ El archivo scenes.txt se ve así:
    </div>
 </p>
 
-En la carpeta [Data](https://github.com/mererr20/Yolo-Project/Data) se pueden visualizar otros resultados obtenidos de otro vídeo testeado.
+En la carpeta [*Data*](https://github.com/mererr20/Azure-Project/tree/main/Data) se pueden visualizar otros resultados obtenidos de otro vídeo testeado.
