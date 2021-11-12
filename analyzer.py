@@ -1,10 +1,16 @@
 import os
-import requests
 import AzureConfig as cnfg
 import concurrent.futures
-import azure.cognitiveservices.speech as speechsdk
+
 import time
-from test import *
+import os.path
+import time
+from azure.cognitiveservices.vision.computervision import ComputerVisionClient
+from azure.cognitiveservices.vision.face import FaceClient
+from msrest.authentication import CognitiveServicesCredentials
+
+'''
+'''
 
 
 def computerVision(imagePath, pos):

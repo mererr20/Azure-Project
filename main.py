@@ -1,17 +1,16 @@
 import os
 import datetime
-import threading
 import concurrent.futures
 from audio import Audio
 from frame import Frame
 import math
 from analyzer import *
-from test import *
+from matplotlib import pyplot
 
-# {'Video':[]}
 textAnalysis = {}
 sceneAnalysis = {}
 emotionAnalysis = {}
+timeProcesses = {}
 
 '''
 '''
@@ -31,6 +30,8 @@ def createMovieDirectories(videoName):
             os.makedirs('Data\\' + videoName + '\\audio')
         if not os.path.exists('Data\\' + videoName + '\\temp'):
             os.makedirs('Data\\' + videoName + '\\temp')
+        if not os.path.exists('Data\\' + videoName + '\\results'):
+            os.makedirs('Data\\' + videoName + '\\results')
     except OSError:
         print('Error: Creating directory of data')
 
@@ -84,7 +85,8 @@ def extraction(videos, videoFolderPath):
             except Exception as exc:
                 print('%r generated an exception: %s' % (future, exc))
     endTime = datetime.datetime.now()
-    print('Time of the extraction method: {}'.format(endTime - startTime))
+    format = endTime - startTime
+    timeProcesses['Extraction'] = format
 
 
 '''
@@ -119,6 +121,7 @@ def distribution(listVideos):
     print(listVideos)
     size = len(listVideos)
     half = math.ceil(size / 2)
+    startTime = datetime.datetime.now()
     with concurrent.futures.ThreadPoolExecutor() as executor:
         a = 2
         if size == 1:
@@ -126,29 +129,114 @@ def distribution(listVideos):
         for x in range(0, a):
             list = listVideos[(x * half): ((x + 1) * half)]
             executor.submit(analyzer, list, x)
+    endTime = datetime.datetime.now()
+    format = endTime - startTime
+    timeProcesses['Analysis'] = format
+
+
+'''
+'''
 
 
 def results(listVideos):
 
-    for video in listVideos:
-
-        video = str(video).replace('.mp4', '')
+    for v in listVideos:
+        video = str(v).replace('.mp4', '')
+        route = 'Data\\' + video + '\\results\\'
+        age = []
+        adultContent = 0
+        gender = [0, 0]
+        audioScore = []
+        emotions = [0, 0, 0, 0, 0, 0, 0, 0]
+        sceneCount = 0
+        faceCount = 0
 
         for audio in textAnalysis[video]:
-            print(audio.confidence_scores.positive,
-                  audio.confidence_scores.neutral, audio.confidence_scores.negative)
+            audioScore.append(audio.confidence_scores.positive*100)
+            audioScore.append(audio.confidence_scores.neutral*100)
+            audioScore.append(audio.confidence_scores.negative*100)
 
         for face in emotionAnalysis[video]:
             if face != '':
-                print(f"->     Azure id: {face.face_id}")
-                print(f"->     Detected age: {face.face_attributes.age}")
-                print(f"->     Detected gender: {face.face_attributes.gender}")
-                print(
-                    f"->     Detected emotion: {face.face_attributes.emotion}")
-                print(f"->     Anger: {face.face_attributes.emotion.anger}")
+                age.append(face.face_attributes.age)
+                if face.face_attributes.gender == 'female':
+                    gender[0] = gender[0] + 1
+                else:
+                    gender[1] = gender[1] + 1
+                emotions[0] = emotions[0] + face.face_attributes.emotion.anger
+                emotions[1] = emotions[1] + \
+                    face.face_attributes.emotion.contempt
+                emotions[2] = emotions[2] + \
+                    face.face_attributes.emotion.disgust
+                emotions[3] = emotions[3] + face.face_attributes.emotion.fear
+                emotions[4] = emotions[4] + \
+                    face.face_attributes.emotion.happiness
+                emotions[5] = emotions[5] + \
+                    face.face_attributes.emotion.neutral
+                emotions[6] = emotions[6] + \
+                    face.face_attributes.emotion.sadness
+                emotions[7] = emotions[7] + \
+                    face.face_attributes.emotion.surprise
+                faceCount += 1
+
+        with open(route + 'scenes.txt', 'a', 1) as file:
+            file.write('Video: ' + video + '\n')
+            age.sort()
+            file.write('Age range: ' + age[0] + 'to ' + age[len(age)-1] + '\n')
+            file.write('Amount of scenes: ' + sceneCount + '\n')
+            file.write('Adult content: ' +
+                       ((adultContent/sceneCount)*100) + '%\n')
+            file.write('Scenarios found: ' + '\n')
 
         for scene in sceneAnalysis[video]:
-            print(scene.adult.is_adult_content)
+            if scene != '':
+                if(scene.adult.is_adult_content):
+                    adultContent += 1
+                if(scene.description.captions):
+                    with open(route + 'scenes.txt', 'a', 1) as file:
+                        file.write('- ' + scene.description.captions + '\n')
+                sceneCount += 1
+
+        with open(route + 'scenes.txt', 'a', 1) as file:
+            file.write('Process time:\n')
+            file.write('- Extraction: ' + timeProcesses['Extraction'] + '\n')
+            file.write('- Analysis: ' + timeProcesses['Analysis'] + '\n')
+        
+
+        genders = ['Female', 'Male']
+        colors = ['orange', 'green']
+        gap = (0, 0.1)
+        pyplot.pie(gender, labels=genders, autopct="%0.1f %%",
+                   shadow=True, pctdistance=0.5, colors=colors, explode=gap)
+        pyplot.title(label='Video: ' + video)
+        pyplot.annotate(
+            (
+                '* Results:' +
+                '\n  - Female: ' + str(gender[0]) +
+                '\n  - Male: ' + str(gender[1])
+            ), xy=(10, 20), xycoords='figure pixels')
+        pyplot.savefig(route + 'gender.jpg')
+        pyplot.close()
+        tags = ['anger', 'contempt', 'disgust', 'fear',
+                'happiness', 'neutral', 'sadness', 'surprise']
+        pyplot.figure(figsize=(11, 6))
+        pyplot.barh(tags, emotions)
+        pyplot.title(label='Video: ' + video + '\nFrecuency')
+        pyplot.ylabel('Emotions')
+        pyplot.xlabel('Quantity')
+        pyplot.annotate(
+            ('* Results:' +
+             '\n  - Number of faces: ' + str(faceCount)), xy=(8, 20), xycoords='figure pixels')
+        pyplot.savefig(route + 'emotions.jpg')
+        pyplot.close()
+        score = ['positive', 'neutral', 'negative']
+        pyplot.figure(figsize=(8, 5))
+        pyplot.barh(score, audioScore)
+        pyplot.title(label='Video: ' + video + '\nFrecuency')
+        pyplot.ylabel('Feeling')
+        pyplot.xlabel('Quantity')
+        pyplot.savefig(route + 'feeling.jpg')
+        pyplot.close()
 
 
 if __name__ == "__main__":

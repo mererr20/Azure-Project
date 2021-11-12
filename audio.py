@@ -1,6 +1,5 @@
 from pydub import AudioSegment
 import moviepy.editor as me
-import math
 
 
 class Audio():

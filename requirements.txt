@@ -23,5 +23,10 @@ matplotlib>=3.4.3
 
 thop  # FLOPs computation
 
-azure-cognitiveservices-speech #Azure speech-to-text
 moviepy
+azure.cognitiveservices.vision.computervision
+azure.cognitiveservices.vision.face
+msrest.authentication
+azure.cognitiveservices.speech
+azure.ai.textanalytics
+azure.core.credentials

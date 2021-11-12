@@ -2,6 +2,7 @@ import cv2
 import concurrent.futures
 from moviepy.editor import *
 
+
 class Frame():
     def __init__(self, path, filename):
         self.filename = filename
@@ -39,4 +40,5 @@ class Frame():
         half = int(self.getMiliseconds() / 2)
         with concurrent.futures.ThreadPoolExecutor() as executor:
             for x in range(0, 2):
-                executor.submit(self.frameExtraction, self.videos[x], (x * half), (x + 1) * half)
+                executor.submit(self.frameExtraction,
+                                self.videos[x], (x * half), (x + 1) * half)
