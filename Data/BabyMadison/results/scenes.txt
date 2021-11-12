@@ -1,0 +1,59 @@
+Video: BabyMadison
+Age range: 8.0 to 28.0
+Scenarios found: 
+- shape
+- a woman in a white dress
+- a woman with a microphone
+- a group of colorful lights
+- a group of people on a stage
+- a woman in a gym
+- a group of women in a dark room
+- a woman in a black dress
+- a person in a tunnel
+- a person standing on a spiral staircase
+- a person standing on a metal structure
+- a woman with long hair
+- a person standing in a pool
+- a man and woman jumping in the air
+- a woman jumping on a bed
+- a person holding a baby on a bed in front of a television
+- a person lying on a white surface
+- a man floating in the air
+- a couple of otters on a ledge
+- a person with long hair
+- a screen with a blue background
+- a person sitting on a blue mat
+- a girl jumping in the air over a bed with a pillow
+- a woman in a white dress
+- a view of the sky through a window
+- a woman in a white dress
+- a person with long hair
+- a woman in a garment
+- a woman with long hair
+- a person standing on a tall pointy tower in the middle of a body of water
+- a screenshot of a computer
+- a person holding a sword
+- graphical user interface, website
+- graphical user interface, website
+- shape
+- a white square with a black background
+- a group of colorful lights
+- a woman looking at something
+- a woman with long hair
+- a group of people sitting on a bench in a dark room
+- a woman standing on a stage
+- a blue sky with clouds
+- a person looking at another woman
+- a woman standing in front of a group of women
+- a person standing in a room
+- a person holding a glass of wine
+- a woman with her hair pulled back
+- a person in a garment
+- a person standing in a room
+- a person on a stage
+- a door with a window
+Adult content: 0.0%
+Amount of scenes: 51
+Process time:
+- Extraction: 0:00:22.842984
+- Analysis: 0:04:36.038175

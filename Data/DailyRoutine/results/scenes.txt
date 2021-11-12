@@ -1,0 +1,35 @@
+
+Video: DailyRoutine
+Age range: 23.0 to 40.0
+Scenarios found: 
+- background pattern
+- a person holding the face
+- a man holding a bag
+- a man in a uniform
+- a man looking at a boy
+- a person holding a rope
+- a man looking at another man
+- a boy sitting on a road
+- a person sitting on the ground
+- a man leaning on a car
+- a person holding a belt
+- a man wearing a hat
+- a person wearing a hat
+- a person wearing a hat
+- a person in a helmet standing next to a toilet
+- a person wearing a mask
+- a man wearing a hat
+- a man wearing a hat
+- a man wearing a hat
+- a man wearing a hat
+- a person washing hands in a sink
+- a person opening a car engine
+- a man holding a gun
+- a man holding a gun
+- a man wearing a hat
+Adult content: 0.0%
+Amount of scenes: 27
+Process time:
+- Extraction: 0:00:32.701018
+- Analysis: 0:04:16.909053
+

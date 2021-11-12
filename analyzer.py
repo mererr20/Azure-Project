@@ -1,13 +1,15 @@
 import os
 import AzureConfig as cnfg
 import concurrent.futures
-
 import time
 import os.path
 import time
+import azure.cognitiveservices.speech as speechsdk
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
+
+
 
 '''
 '''
@@ -40,7 +42,7 @@ def apiFace(imagePath, pos):
         image=image, return_face_attributes=faceAttributes)
     if detected:
         return detected
-    return ''
+    return ['']
 
 
 '''

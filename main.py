@@ -13,13 +13,11 @@ emotionAnalysis = {}
 timeProcesses = {}
 
 '''
+    Método para crear el directorio necesario para el control de
+    los archivos.
 '''
-
-
 def createMovieDirectories(videoName):
     try:
-        if not os.path.exists('FinalResults'):
-            os.makedirs('FinalResults')
         if not os.path.exists('Data'):
             os.makedirs('Data')
         if not os.path.exists('Data\\' + videoName):
@@ -37,9 +35,10 @@ def createMovieDirectories(videoName):
 
 
 '''
+    Este método realiza la extracción de los fotogramas del video,
+    además, lo fracciona en 2 por medio de la clase Frame.
+
 '''
-
-
 def framesExtraction(path, videoName):
     video = Frame(path, videoName)
     video.thread()
@@ -47,10 +46,8 @@ def framesExtraction(path, videoName):
 
 '''
     Este método realiza la extracción del audio del video,
-    además, lo fracciona en 4 por medio de la clase Audio.
+    además, lo fracciona en 2 por medio de la clase Audio.
 '''
-
-
 def audioExtraction(path, videoName):
     audio = Audio(path, videoName)
     audio.audioExtraction()
@@ -62,8 +59,6 @@ def audioExtraction(path, videoName):
     Este método llama a los demás métodos encargados de
     realizar la extracción del audio y frames de un video.
 '''
-
-
 def startExtraction(path, video):
     audioExtraction(path, video)
     framesExtraction(path, video)
@@ -71,9 +66,9 @@ def startExtraction(path, video):
 
 
 '''
+    Método intermedio para obtener los datos de los diferentes
+    vídeos.
 '''
-
-
 def extraction(videos, videoFolderPath):
     startTime = datetime.datetime.now()
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
@@ -90,19 +85,17 @@ def extraction(videos, videoFolderPath):
 
 
 '''
+    Método para realizar el análisis de los datos,
+    tanto de fotogramas como de audios.
 '''
-
-
 def analyzer(list, pos):
     for video in list:
         video = str(video).replace('.mp4', '')
         dataAudio = audioAnalyzer(video, pos)
         dataFrame = frameDistribution(video, pos)
-
         textAnalysis[video] = [dataAudio]
         emotionAnalysis[video] = dataFrame[0]
         sceneAnalysis[video] = dataFrame[1]
-
     print('\n\n')
     print(list)
     print('\n\n')
@@ -114,9 +107,10 @@ def analyzer(list, pos):
 
 
 '''
+    Método intermedio para comenzar con el análisis de
+    los datos de los videos. En este método se asigna
+    qué api consultar.
 '''
-
-
 def distribution(listVideos):
     print(listVideos)
     size = len(listVideos)
@@ -135,11 +129,10 @@ def distribution(listVideos):
 
 
 '''
+    Método para obtener todos los resultados obtenidos luego
+    del análisis del mismo.
 '''
-
-
 def results(listVideos):
-
     for v in listVideos:
         video = str(v).replace('.mp4', '')
         route = 'Data\\' + video + '\\results\\'
@@ -152,9 +145,10 @@ def results(listVideos):
         faceCount = 0
 
         for audio in textAnalysis[video]:
-            audioScore.append(audio.confidence_scores.positive*100)
-            audioScore.append(audio.confidence_scores.neutral*100)
-            audioScore.append(audio.confidence_scores.negative*100)
+            if(audio != ''):
+                audioScore.append(audio.confidence_scores.positive*100)
+                audioScore.append(audio.confidence_scores.neutral*100)
+                audioScore.append(audio.confidence_scores.negative*100)
 
         for face in emotionAnalysis[video]:
             if face != '':
@@ -182,10 +176,7 @@ def results(listVideos):
         with open(route + 'scenes.txt', 'a', 1) as file:
             file.write('Video: ' + video + '\n')
             age.sort()
-            file.write('Age range: ' + age[0] + 'to ' + age[len(age)-1] + '\n')
-            file.write('Amount of scenes: ' + sceneCount + '\n')
-            file.write('Adult content: ' +
-                       ((adultContent/sceneCount)*100) + '%\n')
+            file.write('Age range: ' + str(age[0]) + ' to ' + str(age[len(age)-1]) + '\n')
             file.write('Scenarios found: ' + '\n')
 
         for scene in sceneAnalysis[video]:
@@ -193,14 +184,24 @@ def results(listVideos):
                 if(scene.adult.is_adult_content):
                     adultContent += 1
                 if(scene.description.captions):
-                    with open(route + 'scenes.txt', 'a', 1) as file:
-                        file.write('- ' + scene.description.captions + '\n')
+                    for caption in scene.description.captions:
+                        with open(route + 'scenes.txt', 'a', 1) as file:
+                            file.write('- ' + caption.text + '\n')
                 sceneCount += 1
 
         with open(route + 'scenes.txt', 'a', 1) as file:
+            if sceneCount != 0:
+                file.write('Adult content: ' +
+                        str(((adultContent/sceneCount)*100)) + '%\n')
+            else:
+                file.write('Adult content: ' +
+                        str(0) + '%\n')
+            file.write('Amount of scenes: ' + str(sceneCount) + '\n')
+
+        with open(route + 'scenes.txt', 'a', 1) as file:
             file.write('Process time:\n')
-            file.write('- Extraction: ' + timeProcesses['Extraction'] + '\n')
-            file.write('- Analysis: ' + timeProcesses['Analysis'] + '\n')
+            file.write('- Extraction: ' + str(timeProcesses['Extraction']) + '\n')
+            file.write('- Analysis: ' + str(timeProcesses['Analysis']) + '\n')
         
 
         genders = ['Female', 'Male']
@@ -238,13 +239,19 @@ def results(listVideos):
         pyplot.savefig(route + 'feeling.jpg')
         pyplot.close()
 
-
-if __name__ == "__main__":
+'''
+    Método principal, donde se crea el directorio y se hace
+    el llamado correspondiente.
+'''
+def main(route):
     print('Welcome to the analyzer!')
-    folderPath = '.\\videos'  # Address of the folder to analyze
+    folderPath =  route
     nameVideos = os.listdir(folderPath)
     for video in nameVideos:
         createMovieDirectories(video.replace('.mp4', ''))
     extraction(nameVideos, folderPath)
     distribution(nameVideos)
     results(nameVideos)
+
+if __name__ == "__main__":
+    main('.\\videos')  # Address of the folder to analyze
