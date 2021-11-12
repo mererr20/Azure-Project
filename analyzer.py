@@ -4,36 +4,18 @@ import AzureConfig as cnfg
 import concurrent.futures
 import azure.cognitiveservices.speech as speechsdk
 import time
+from test import *
 
 
-'''
-'''
-
-
-def apiFace(image, pos):
-    time.sleep(0.5)
-    # API FACE
-    # Get the Face API keys
-    subscriptionKeyFace, faceApiUrl = cnfg.configFace(pos)
-
-    # Build headers and params to do the request.
-    headersFace = {
-        'Content-Type': 'application/octet-stream',
-        'Ocp-Apim-Subscription-Key': subscriptionKeyFace
-    }
-
-    paramsFace = {
-        'returnFaceId': 'false',
-        'returnFaceAttributes': 'age,gender,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,exposure,noise'
-    }
-
-    imageData = open(image, "rb")
-    response = requests.post(faceApiUrl, params=paramsFace,
-                             headers=headersFace, data=imageData)
-    response.raise_for_status()
-    face = response.json()
-    if face != []:
-        return(face[0])
+def computerVision(imagePath, pos):
+    image = open(os.path.join(imagePath), "rb")
+    azureComputerVision = ComputerVisionClient(
+        cnfg.ENDPOINTS[pos], CognitiveServicesCredentials(cnfg.KEYS[pos]))
+    sceneAttributes = ["adult", "description"]
+    results = azureComputerVision.analyze_image_in_stream(
+        image, sceneAttributes)
+    if results:
+        return results
     return ''
 
 
@@ -41,22 +23,29 @@ def apiFace(image, pos):
 '''
 
 
-def audioAnalysis(text):
-    BADWORDS = ["vodka"]
-    for word in BADWORDS:
-        if word.lower() in text:
-            print("{} es una mala palabra.".format(word.lower()))
+def apiFace(imagePath, pos):
+    print(os.path.basename(imagePath))
+    image = open(os.path.join(imagePath), "rb")
+    apiFace = FaceClient(
+        cnfg.ENDPOINTS[pos], CognitiveServicesCredentials(cnfg.KEYS[pos]))
+    faceAttributes = ['age', 'gender', 'smile', 'facialHair',
+                      'emotion', 'hair', 'accessories', 'noise']
+    detected = apiFace.face.detect_with_stream(
+        image=image, return_face_attributes=faceAttributes)
+    if detected:
+        return detected
+    return ''
+
+
+'''
+'''
 
 
 def audioToText(audio, pos):
-
-    # SPEECH
-    subscriptionKeyAudio, region = cnfg.configAudio(pos)
-
     allText = []
     done = False
     speechConfig = speechsdk.SpeechConfig(
-        subscription=subscriptionKeyAudio, region=region)
+        subscription=cnfg.KEYS[pos], region='southcentralus')
     audioConfig = speechsdk.audio.AudioConfig(filename=(audio))
     speechRecognizer = speechsdk.SpeechRecognizer(
         speech_config=speechConfig, audio_config=audioConfig)
@@ -94,7 +83,6 @@ def audioToText(audio, pos):
         textComplete += text
         textComplete += " "
     return textComplete
-    #return audioAnalysis(textComplete)
 
 
 '''
@@ -105,34 +93,47 @@ def audioAnalyzer(video, pos):
     routeAudios = 'Data\\' + video + '\\audio'
     audios = os.listdir(routeAudios)
     textDetections = ['']
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-        future_to_url = {executor.submit(
-            audioToText, (routeAudios + '\\' + url), pos): url for url in audios}
-        for future in concurrent.futures.as_completed(future_to_url):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futureAudio = {executor.submit(
+            audioToText, (routeAudios + '\\' + audio), pos): audio for audio in audios}
+        for future in concurrent.futures.as_completed(futureAudio):
             try:
                 data = future.result()
                 textDetections[0] = textDetections[0] + data
-                # textDetections.append(data)
             except Exception as exc:
                 print('%r generated an exception: %s' % (future, exc))
-    return textDetections
+    print(textDetections)
+    if textDetections[0] != '':
+        azure = cnfg.textAnalyticsKey(pos)
+        response = azure.analyze_sentiment(documents=textDetections)[0]
+        return response
+    return ''
+
+
+def frameAnalyzer(imagePath, pos):
+    results = []
+    results.append(apiFace(imagePath, pos)[0])
+    results.append(computerVision(imagePath, pos))
+    return results
 
 
 '''
 '''
 
 
-def frameAnalyzer(video, pos):
+def frameDistribution(video, pos):
     routeFrames = 'Data\\' + video + '\\frames'
     frames = os.listdir(routeFrames)
-    emotionDetectionsFrame = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    faceDetectionsFrame = []
+    sceneDetectionsFrame = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         futureFrame = {executor.submit(
-            apiFace, (routeFrames + '\\' + frame), pos): frame for frame in frames}
+            frameAnalyzer, (routeFrames + '\\' + frame), pos): frame for frame in frames}
         for future in concurrent.futures.as_completed(futureFrame):
             try:
                 data = future.result()
-                emotionDetectionsFrame.append(data)
+                faceDetectionsFrame.append(data[0])
+                sceneDetectionsFrame.append(data[1])
             except Exception as exc:
                 print('%r generated an exception: %s' % (future, exc))
-    return emotionDetectionsFrame
+    return [faceDetectionsFrame, sceneDetectionsFrame]

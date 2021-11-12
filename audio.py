@@ -17,7 +17,7 @@ class Audio():
         return self.audio.duration_seconds
 
     def getDurationMinutes(self):
-        return math.ceil(self.getDurationSeconds() / 60)
+        return int(self.getDurationSeconds() / 60)
 
     def singleSplit(self, fromMin, toMin, splitFilename):
         t1 = fromMin * 60 * 1000
@@ -32,8 +32,7 @@ class Audio():
             split = str(i) + '_audio'
             self.singleSplit(i, i + minSplit, split)
             print(str(i) + ' Done')
-            if i == totalMins - minSplit:
-                print('All splited successfully')
+        print('All splited successfully')
 
     def audioExtraction(self):
         print("Converting...")
