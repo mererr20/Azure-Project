@@ -40,6 +40,7 @@ $ cd Azure-Project
 $ pip install -r requirements.txt
 $ pip install azure-appconfiguration
 $ pip install azure-cognitiveservices-speech
+$ pip install azure-cognitiveservices-vision-face   
 $ pip install audio
 $ pip install futures
 $ pip install moviepy  
