@@ -70,7 +70,7 @@ Al final, se llama la función [*results*](https://github.com/mererr20/Azure-Pro
 
 <br><br>
 # <div align="center">Resultados</div>
-Para los resultados presntados a continuación, se utilizó el video llamado "DailyRoutine" que tiene una duración aprozimada de 6 minutos , de el cual se obtuvo lo siguiente:
+Para los resultados presentados a continuación, se utilizó el video llamado "DailyRoutine" que tiene una duración aproximada de 6 minutos , de el cual se obtuvo lo siguiente:
 
 <p>
    <div align="center">
