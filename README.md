@@ -19,7 +19,7 @@
 <p>
 Azure Cognitive es una IA desarrollada por Microsoft para el alcance de desarrolladores y científicos de datos. Los modelos brindados por ellos permiten incorporar la capacidad de ver, escuchar, hablar, buscar, comprender y acelerar la toma de decisiones avanzadas en las aplicaciones unicamente llamando el API desde el proyecto que se está desarrollando.
   
-En este proyecto se utilizó esta herramienta para 4 tareas. Una es el analizar las caras de la personas para obtener las emociones, el género, edad, con el API Face. Otra api utiliza fue SPEECH, la cual nos ayuda para extraer el audio de un vídeo, para posterior enviar el texto a Text Analitics, otra api para analizar el sentimiento del mismo. Y por último, Computer Vision, para analizar la escena de la imagen para poder detectar las actividades realizadas o si contiene contenido de adultos.
+En este proyecto se utilizó esta herramienta para 4 tareas. Una es el analizar las caras de la personas para obtener las emociones, el género, edad, con el API Face. Otra api utiliza fue SPEECH, la cual nos ayuda para extraer el audio de un vídeo, para posterior enviar el texto a Text Analytics, otra api para analizar el sentimiento del mismo. Y por último, Computer Vision, para analizar la escena de la imagen para poder detectar las actividades realizadas o si contiene contenido de adultos.
 </p>
 <br>
 
