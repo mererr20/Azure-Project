@@ -30,3 +30,6 @@ msrest.authentication
 azure.cognitiveservices.speech
 azure.ai.textanalytics
 azure.core.credentials
+azure-appconfiguration  
+moviepy  
+pydub
