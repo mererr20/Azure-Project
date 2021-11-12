@@ -46,7 +46,7 @@ $ pip install futures
 $ pip install moviepy  
 $ pip install pydub
 ```
-
+Importante también el ingresar en [*AzureConfig.py*](https://github.com/mererr20/Azure-Project/blob/main/AzureConfig.py) en la línea [*4*](https://github.com/mererr20/Azure-Project/blob/c14c1edd3f3107c17885bcb55a71c4d5524d64c1/AzureConfig.py#L4) y la [*5*](https://github.com/mererr20/Azure-Project/blob/c14c1edd3f3107c17885bcb55a71c4d5524d64c1/AzureConfig.py#L5) las credenciales de Azure. 
   
    
 Una vez tenemos todo lo necesario, debemos ejecutar el [main.py](https://github.com/mererr20/Azure-Project/blob/main/main.py)
