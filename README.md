@@ -1,5 +1,3 @@
-# Azure-Project
-
 # <div align="center">Azure Cognitive Services en archivos multimedia</div>
 <p>
    <a align="left" href="https://azure.microsoft.com/es-es/services/cognitive-services/" target="_blank">
