@@ -14,12 +14,12 @@ class Frame():
         while(start <= end):
             video.set(cv2.CAP_PROP_POS_MSEC, start)
             ret, frame = video.read()
-            if(ret):
-                newRoute = '.\\Data\\' + self.filename + '\\frames\\' + \
-                    str(start) + '_' + self.filename + '.jpg'
+            newRoute = '.\\Data\\' + self.filename + '\\frames\\' + \
+                str(start) + '_' + self.filename + '.jpg'
+            if ret:
                 cv2.imwrite(newRoute, frame)
                 cv2.waitKey(0)
-                start += 2000
+            start += 5000
         video.release()
         cv2.destroyAllWindows()
 
@@ -35,8 +35,13 @@ class Frame():
     def getMiliseconds(self):
         return math.ceil(self.getSeconds() * 1000)
 
-    def thread(self, video, fromMin, toMin):
-        videoThread = threading.Thread(
-            target=self.frameExtraction, args=(video, fromMin, toMin))
-        videoThread.start()
-        videoThread.join()
+    def thread(self):
+        half = math.ceil(self.getMiliseconds() / 2)
+        video1Thread = threading.Thread(
+        target=self.frameExtraction, args=(self.video1, 0, half))
+        video2Thread = threading.Thread(target=self.frameExtraction, args=(
+            self.video2, half, self.getMiliseconds()))
+        video1Thread.start()
+        video2Thread.start()
+        video1Thread.join()
+        video2Thread.join()
