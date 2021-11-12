@@ -23,20 +23,8 @@ Azure Cognitive es una IA desarrollada por Microsoft y que pusieron al alcance d
   
 En este proyecto se utilizó esta herramienta para dos tareas. Una es el analizar una persona en generada a partir de un video y obtener las emociones, el género y objetos que este cargando. La segunda tarea es un análisis del audio de un video para detectar el uso de mal vocabulario.
 </p>
-<br><br>
+<br>
 
-
-# <div align="center">Modelo usado *Yo quitaría esta parte</div>
-
-<p>
-Para llevar a cabo la detección de los objetos, es necesario contar con un modelo entrenado para encontrar los objetos. En este caso, utilizamos y brindamos para su uso, un modelo entrenado con 5000 imágenes de cada una de las siguientes categorías:
-
-    - Personas (Person).
-    - Bebidas alcohólicas (Drink).
-    - Armas (Weapon).
-    - Cuchillos (knife).
-</p>
-<br><br>
 </div>
 
 # <div align="center">Cómo iniciar</div>
@@ -79,23 +67,36 @@ Primero, se llama la función [*extraction*](https://github.com/mererr20/Azure-P
 
 Ya con todo esto preparado se llama  la función [*distribution*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L120) encargada de organizar las carpetas. Desde esta función se llama a [*distribution*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L96). Esta segunda función lo que hace es invocar la clase [*analizer.py*](https://github.com/mererr20/Azure-Project/blob/main/analyzer.py) que es donde se hace la conección con la API de Azure Cognitive Services.
 
-Al final, se llama la función [*results*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L141) en donde los resultados generados se guardan en un archivo llamado (*scenes.txt*) y posteriormente se muestran gráficos generados a partir de la misma información
+Al final, se llama la función [*results*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L141) en donde los resultados generados se guardan en un archivo llamado (*scenes.txt*) que se incluye un rango de las edades de las personas detectdas, una descripción de los escenarios de los frames, si hay contenido adulto, la cantidad de escenas y los tiempos de duración. Además, se muestran gráficos generados a partir de la misma información
 
 <br><br>
 # <div align="center">Resultados</div>
-Para los resultados, se tomó una película llamada "Hombre lobo" con una duración de 1h, de la cual se obtuvo lo siguiente:
+Para los resultados presntados a continuación, se utilizó el video llamado "DailyRoutine" que tiene una duración aprozimada de 6 minutos , de el cual se obtuvo lo siguiente:
 
 <p>
    <div align="center">
-   <img width="550" src="https://github.com/mererr20/Yolo-Project/blob/main/resources/hombrelobo.jpg"></a>
+   <img width="550" src="https://github.com/mererr20/Azure-Project/blob/main/resources/emotions.jpg"></a>
    </div>
 </p>
 
-A nivel de consola se muestra así:
 
 <p>
    <div align="center">
-      <img width="550" src="https://github.com/mererr20/Yolo-Project/blob/main/resources/hombrelobo.png"></a>
+   <img width="550" src="https://github.com/mererr20/Azure-Project/blob/main/resources/feeling.jpg"></a>
+   </div>
+</p>
+
+<p>
+   <div align="center">
+   <img width="550" src="https://github.com/mererr20/Azure-Project/blob/main/resources/gender.jpg"></a>
+   </div>
+</p>
+
+El archivo scenes.txt se ve así:
+
+<p>
+   <div align="center">
+      <img width="550" src="https://github.com/mererr20/Azure-Project/blob/main/resources/resultScenes.png"></a>
    </div>
 </p>
 
