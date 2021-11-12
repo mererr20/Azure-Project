@@ -1,4 +1,4 @@
-# <div align="center">Azure Cognitive Services en archivos multimedia</div>
+# <div align="center">Azure Cognitive Services en archivos de video</div>
 <p>
    <a align="left" href="https://azure.microsoft.com/es-es/services/cognitive-services/" target="_blank">
    <img width="850" src="https://techcommunity.microsoft.com/t5/image/serverpage/image-id/179918i6FC3178F079DE32D/image-size/large?v=v2&px=999"></a>
