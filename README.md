@@ -47,7 +47,7 @@ Para llevar a cabo la detección de los objetos, es necesario contar con un mode
 Se requiere [**Python>=3.6.0**](https://www.python.org/) y los requerimientos especificados en [requirements.txt](https://github.com/mererr20/Azure-Project/blob/main/requirements.txt).
 
 ```bash
-$ git clone https://github.com/mererr20/Yolo-Project.git
+$ git clone https://github.com/mererr20/Azure-Project.git
 $ cd Azure-Project
 $ pip install -r requirements.txt
 $ pip install azure-appconfiguration
@@ -75,15 +75,11 @@ A continuación, explicamos cómo se implementó la solución realizada y su eje
 
 Para empezar, la función [*main(routeDirectory)*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L154) es la función principal, la cual será la encargada de llamar las demás funciones para una correcta ejecución, además, la encargada de recibir por parámetro la ruta de la carpeta a analizar,<a href="#cómo-iniciar"> como se mencionó anteriormente.</a>
 
-Primero, se llama la función [*extraction*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L76) que es la que permite la extracción tanto de los frames de los videos así como el audio de los mismos. Para guardar todo lo que se extrajo se crean carpetas para almacenarlos 
+Primero, se llama la función [*extraction*](https://github.com/mererr20/Azure-Project/blob/9767120c04e99028ba824d49ee3b8625673a9cb4/main.py#L76) que es la que permite la extracción tanto de los frames de los videos cada 1 segundo así como el audio para después partirlo en 2. Para guardar todo lo que se extrajo se crean las carpeta Data y dentro de ella subcarpetas con los nombres de los videos. Dentro de estas subcarpetas se almacenan los frames y los audios extraídos.
 
-Primeramente, se hace la llamada de la función [*getMoviesRoute*](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L16), esta nos permite extraer los nombres de las películas que se encuentren en la carpeta indicada. Luego de esto, se crean los [directorios](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L25), donde se creará una carpeta con el nombre de la película, dentro de esta se almacenarán los resultados (*results*) y fotogramas obtenidos (*firstPortion* y *secondPortion*).
+Ya con todo esto preparado se llama  la función [*distribution*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L120) encargada de organizar las carpetas. Desde esta función se llama a [*distribution*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L96). Esta segunda función lo que hace es invocar la clase [*analizer.py*](https://github.com/mererr20/Azure-Project/blob/main/analyzer.py) que es donde se hace la conección con la API de Azure Cognitive Services.
 
-Teniendo ya las rutas y los directorios necesarios para control, se llama la función [*firstProcesses*](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L186) encargada de crear los 2 primeros procesos, al primer proceso se le envía la mitad de las películas y al segundo el resto, estos procesos obtendrán los fotogramas de las películas con la función [*getFrames*](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L47). De cada película se extrae un fotograma (image) por segundo.
-
-Creado los directorios y obteniendo los fotogramas, ya se puede proceder a hacer el análisis de los fotogramas, para esto se llama la función [*secondProcesses*](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L201) encargada de crear 4 procesos, los cuales estarán encargados de ingresar a la carpeta *Frames* donde se encuentran las carpetas con el nombre de cada pelicula, dentro de estas estarán los fotogramas obtenidos anteriormente.
-
-Finalmente, se llama la función [*yolo*](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L96), YOLO se encarga de detectar los objetos según lo entendido por el modelo anteriormente explicado. Aquí también se guarda la data que va obteniendo en varios txt's según la clase encontrada, y por último se generan unas gráficas con [*generateGraph*](https://github.com/mererr20/Yolo-Project/blob/bbf18c89e7ad457235ad5188d9dbab9d051b005b/main.py#L144) que se almacenarán en la carpeta *FinalResults*, además de una impresión en consola que muestra lo mismo.
+Al final, se llama la función [*results*](https://github.com/mererr20/Azure-Project/blob/7fd30b7a280ba3e98886020c0b640847a3dcfa84/main.py#L141) en donde los resultados generados se guardan en un archivo llamado (*scenes.txt*) y posteriormente se muestran gráficos generados a partir de la misma información
 
 <br><br>
 # <div align="center">Resultados</div>
